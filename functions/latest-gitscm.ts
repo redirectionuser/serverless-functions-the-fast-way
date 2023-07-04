@@ -6,16 +6,17 @@ import fetch from 'node-fetch';
 
 export const handler: ServerHandler = async () => {
   let serverResponse: ServerResponse =  { statusCode: 500 };
-  let apiResponse = await fetch('https://nodejs.org/dist/latest-hydrogen/SHASUMS256.txt')
+  let apiResponse = await fetch('https://api.github.com/repos/git-for-windows/git/releases/latest')
   .then((response) => response as FetchResponse)
   .catch((error) => error as FetchError);
   if (apiResponse instanceof FetchResponse) {
-    let tag_name = (await apiResponse.text())?.match(/v\d+\.\d+\.\d/)?.find(String);
+    let tagNumber = JSON.parse(await apiResponse.text())?.tag_name?.match(/\d+\.\d+\.\d+/)?.find(String);
+    let downloadUri = `https://github.com/git-for-windows/git/releases/download/v${tagNumber}.windows.1/PortableGit-${tagNumber}-64-bit.7z.exe`;
     serverResponse = {
       statusCode: 302,
       headers: {
         'Content-Type': 'text/plain',
-        'Location': `https://nodejs.org/dist/${tag_name}/node-${tag_name}-win-x64.zip`,
+        'Location': downloadUri,
       },
     };
   }

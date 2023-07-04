@@ -10,12 +10,13 @@ export const handler: ServerHandler = async () => {
   .then((response) => response as FetchResponse)
   .catch((error) => error as FetchError);
   if (apiResponse instanceof FetchResponse) {
-    let tag_name = JSON.parse(await apiResponse.text())?.tag_name;
+    let tagNumber = JSON.parse(await apiResponse.text())?.tag_name?.match(/\d+\.\d+\.\d+\.\d+/)?.find(String);
+    let downloadUri = `https://github.com/VSCodium/vscodium/releases/download/${tagNumber}/VSCodium-win32-x64-${tagNumber}.zip`;
     serverResponse = {
       statusCode: 302,
       headers: {
         'Content-Type': 'text/plain',
-        'Location': `https://github.com/VSCodium/vscodium/releases/download/${tag_name}/VSCodium-win32-x64-${tag_name}.zip`,
+        'Location': downloadUri,
       },
     };
   }
