@@ -1,12 +1,8 @@
 import type { Handler as ServerHandler } from "@netlify/functions";
 
 export const handler: ServerHandler = async () => {
-  return {
-    statusCode: 200,
-    headers: {
-    'Content-Type': 'application/json',
-    },
-    body: `{
+  const extensionsGallery: string = JSON.stringify(JSON.parse(`
+    {
       "extensionsGallery": {
         "nlsBaseUrl": "https://www.vscode-unpkg.net/_lp/",
         "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
@@ -16,7 +12,14 @@ export const handler: ServerHandler = async () => {
         "resourceUrlTemplate": "https://{publisher}.vscode-unpkg.net/{publisher}/{name}/{version}/{path}",
         "controlUrl": "https://az764295.vo.msecnd.net/extensions/marketplace.json"
       }
-    }`,
+    }
+  `), null, 2);
+  return {
+    statusCode: 200,
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: extensionsGallery,
   };
 };
 
@@ -24,4 +27,5 @@ export const handler: ServerHandler = async () => {
  * Resources
  *   https://medium.com/better-practices/serverless-functions-the-fast-way-43d6128ff8d5
  *   https://docs.netlify.com/functions/create/?fn-language=ts
+ *   https://stackoverflow.com/questions/5670752/how-can-i-pretty-print-json-using-node-js
  ***/
