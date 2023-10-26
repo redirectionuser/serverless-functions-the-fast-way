@@ -12,7 +12,7 @@ export const handler: ServerHandler = async () => {
   .catch((error) => error as FetchError);
   if (apiResponse instanceof FetchResponse) {
     let tagNumber = JSON.parse(await apiResponse.text())?.tag_name?.match(/\d+[\d\.+]+/)?.find(String);
-    let downloadUri = `https://github.com/${githubProject}/releases/download/jdk-${tagNumber}/OpenJDK17U-jdk_x64_windows_hotspot_${tagNumber.replace('+','_')}.zip`;
+    let downloadUri = `https://github.com/${githubProject}/releases/download/jdk-${tagNumber}/OpenJDK17U-jdk_x86-32_windows_hotspot_${tagNumber.replace('+','_')}.zip`;
     serverResponse = {
       statusCode: 302,
       headers: {
